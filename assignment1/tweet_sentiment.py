@@ -48,7 +48,6 @@ def main():
     hw()
 
     scores = scoreDirectory()
-    #print scores.items()
     
     [data_f] = countMoodScore(scores)
     
