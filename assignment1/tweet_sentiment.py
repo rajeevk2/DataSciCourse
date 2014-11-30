@@ -3,6 +3,7 @@ import json
 import re
 from pprint import pprint
 import codecs
+from collections import Counter
 
 def hw():
     print 'Hello, world!'
@@ -14,22 +15,31 @@ def scoreDirectory():
     afinnfile = open("AFINN-111.txt")
     scores ={}
     for line in afinnfile:
-            term, score = line.split("\t")
-            scores[term] = int(score)
+        term, score = line.split("\t")
+        scores[term] = int(score)
     return scores
 
-def countMoodScore():
+def countMoodScore(scores):
     data_f = codecs.open('output.txt','rU','utf-8') 
     for line in data_f:
         tweet = json.loads(line)
-        if tweet["lang"] == "en":
-            #print tweet["source"]
-            try:
-                print tweet["text"]
-            except:
-                print "Cannot print tweet text"
-                pass
-    return data_f
+        sentiment = 0
+        try:
+            if tweet["lang"] == "en":
+                try:
+                    newline = tweet["text"]
+                    words = [w for w in newline.split()]
+                    for word in words:
+                        for scored_word in scores:
+                            if word==scored_word:
+                                sentiment += scores[word]
+                                print "\tsentiment for {term} is {score}".format(term=word,score=scores[word])
+                except:
+                    pass
+        except:
+            pass
+        print "sentiment is %d" %sentiment
+    return [data_f]
 
 
 def main():
@@ -40,7 +50,7 @@ def main():
     scores = scoreDirectory()
     #print scores.items()
     
-    data_f = countMoodScore()
+    [data_f] = countMoodScore(scores)
     
     lines(sent_file)
     lines(tweet_file)
