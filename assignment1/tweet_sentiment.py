@@ -23,7 +23,12 @@ def countMoodScore():
     for line in data_f:
         tweet = json.loads(line)
         if tweet["lang"] == "en":
-            print tweet["source"]
+            #print tweet["source"]
+            try:
+                print tweet["text"]
+            except:
+                print "Cannot print tweet text"
+                pass
     return data_f
 
 
