@@ -1,9 +1,6 @@
 import sys
 import json
-import re
-from pprint import pprint
 import codecs
-from collections import Counter
 
 def hw():
     print 'Hello, world!'
