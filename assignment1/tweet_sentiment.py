@@ -18,6 +18,7 @@ def scoreDirectory():
 
 def countMoodScore(scores):
     data_f = codecs.open('output.txt','rU','utf-8') 
+	lineNum = 0
     for line in data_f:
         tweet = json.loads(line)
         sentiment = 0
@@ -26,11 +27,12 @@ def countMoodScore(scores):
                 try:
                     newline = tweet["text"]
                     words = [w for w in newline.split()]
+					lineNum +=1
                     for word in words:
                         for scored_word in scores:
                             if word==scored_word:
                                 sentiment += scores[word]
-                                print "\tsentiment for {term} is {score}".format(term=word,score=scores[word])
+                                print "\t{lineN}sentiment for {term} is {score}".format(lineN=lineNum,term=word,score=scores[word])
                 except:
                     pass
         except:
