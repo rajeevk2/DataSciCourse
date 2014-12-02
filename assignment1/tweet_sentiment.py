@@ -16,28 +16,31 @@ def scoreDirectory():
         scores[term] = int(score)
     return scores
 
-def countMoodScore(scores):
-    data_f = codecs.open('output.txt','rU','utf-8') 
-	lineNum = 0
+def countMoodScore(scores,fp):
+    data_f = codecs.open(fp.name,'rU','utf-8') 
+    lineNum = 0
     for line in data_f:
         tweet = json.loads(line)
         sentiment = 0
+        lineNum +=1
         try:
             if tweet["lang"] == "en":
+                print json.dumps(tweet,indent=4)
                 try:
                     newline = tweet["text"]
-                    words = [w for w in newline.split()]
-					lineNum +=1
-                    for word in words:
+                    for word in newline.split():
                         for scored_word in scores:
-                            if word==scored_word:
-                                sentiment += scores[word]
-                                print "\t{lineN}sentiment for {term} is {score}".format(lineN=lineNum,term=word,score=scores[word])
+                            try:
+                                if word==scored_word:
+                                    sentiment += scores[word]
+                                    print "\tsentiment for {term} is {score}".format(term=word,score=scores[word])
+                            except:
+                                pass
                 except:
                     pass
         except:
             pass
-        print "sentiment is %d" %sentiment
+        print "sentiment of tweet # {LineN} is {value}".format(LineN=lineNum,value=sentiment)
     return [data_f]
 
 
@@ -48,7 +51,7 @@ def main():
 
     scores = scoreDirectory()
     
-    [data_f] = countMoodScore(scores)
+    [data_f] = countMoodScore(scores,sent_file)
     
     lines(sent_file)
     lines(tweet_file)
