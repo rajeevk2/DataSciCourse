@@ -1,6 +1,7 @@
 import sys
 import codecs
 import json
+import urllib
 
 states = {'AK': 'Alaska',
         'AL': 'Alabama',
@@ -101,4 +102,18 @@ p.sort(reverse=True) # sort list as happiest to saddest
 
 for index,place in p[0:10]:
     print place,'\t',index
-                
+
+
+
+response = urllib.urlopen('http://maps.googleapis.com/maps/api/geocode/json?latlng=36.0800,-79.8194')
+gapi_loc = json.load(response)
+addresses = []
+for lines in gapi_loc['results']:
+    addresses.append(lines['formatted_address'])
+state_here = addresses[len(addresses)-3].split(',')
+state_ac = state_here[1]
+state_here = addresses[len(addresses)-2].split(',')
+state = state_here[0]
+
+if state_ac in states.keys() or state in states.values():
+    print '\n\n Found {ss} in states dictonary'.format(ss=state_ac)
