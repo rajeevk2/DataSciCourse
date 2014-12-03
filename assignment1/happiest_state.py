@@ -70,10 +70,11 @@ scores ={}
 for line in s:
     term, score = line.split("\t")
     scores[term] = int(score)
-print scores.keys()
-# open file with tweets
-f = codecs.open(sent_file.name,'rU','utf-8')
 
+# open file with tweets
+f = codecs.open(tweet_file.name,'rU','utf-8')
+
+h={} # happiness directory
 for line in f:
     tweet=json.loads(line)
     sentiment = 0
@@ -81,9 +82,23 @@ for line in f:
         if tweet['lang']=='en':
             newline = tweet['text']
             for w in  newline.split():
-                if w in scores.keys():
-                    sentiment += scores[w]
+                for word in scores:
+                    if w == word:
+                        sentiment += scores[w]
+                        print "\tsentiment for {term} is {score}".format(term=word,score=scores[word])
             place = tweet['place']
+            print 'sentiment for {area} is {num}'.format(area=place,num=sentiment)
+            print 'Coordinates are ',tweet['coordinates']
             if place in states.keys() or place in states.values():
-                do something
+                h[place] = h.get(place,0) + sentiment
+    except:
+        pass
+
+p =[] # happiest place list
+for key, value in h.items():
+    p.append((value,key)) # list consists of place, happiness index
+p.sort(reverse=True) # sort list as happiest to saddest
+
+for index,place in p[0:10]:
+    print place,'\t',index
                 

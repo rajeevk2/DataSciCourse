@@ -1,7 +1,7 @@
 import sys
 import codecs
 import json
-from collections import Counter
+##from collections import Counter
 
 sent_file = open(sys.argv[1])
 
