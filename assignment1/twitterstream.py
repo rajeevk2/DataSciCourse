@@ -1,5 +1,7 @@
 import oauth2 as oauth
 import urllib2 as urllib
+import json
+import sys
 
 # See assignment1.html instructions or README for how to get these credentials
 
@@ -54,10 +56,24 @@ def fetchsamples():
   url = "https://stream.twitter.com/1/statuses/sample.json"
   #url = "https://api.twitter.com/1.1/search/tweets.json?q=microsoft"
   parameters = []
+  numTweets = 0
   response = twitterreq(url, "GET", parameters)
+  
   for line in response:
     print line.strip()
-  #print response.keys()
+    tweet = json.loads(line)
+    try:
+      if tweet['lang']=='en':
+        place = tweet['place']
+        if place['country_code']=='US':
+          print line.strip()
+          numTweets +=1
+          print '\n\n num_tweets {num}'.format(num=numTweets)
+##          if numTweets>2:
+##            sys.exit('2 English language tweets from US collected')
+    except:
+      pass
+        
 
 if __name__ == '__main__':
   fetchsamples()
