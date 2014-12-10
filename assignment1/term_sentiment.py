@@ -1,6 +1,7 @@
 import sys
 import codecs
 import json
+import re
         
 def hw():
     print '======================\nHello, world!\n======================\n'
@@ -20,6 +21,7 @@ def countMoodScore(scores):
     data_f = codecs.open('output.txt','rU','utf-8') 
     lineNum = 0
     sentiments={}
+    word_sentiments={}
     for line in data_f:
         tweet = json.loads(line)
         sentiment = 0
@@ -42,9 +44,13 @@ def countMoodScore(scores):
                     pass
         except:
             pass
-##        print "sentiment of tweet # {LineN} is {value}".format(LineN=lineNum,value=sentiment)
         sentiments[lineNum]=sentiment
         print "sentiment of tweet = {value}".format(value=sentiments[lineNum])
+        # assign this sentiment to all words in the tweet
+        for word in tweet:
+            word_sentiments[word] = sentiments[lineNum]
+            if not scores.get(word):
+                print 'sentiment of {wrd} is {num}'.format(wrd=word,num=sentiment)
     return sentiments
 
         
