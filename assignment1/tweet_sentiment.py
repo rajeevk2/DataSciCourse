@@ -16,6 +16,8 @@ def scoreDirectory():
         term, score = line.split("\t")
         scores[term] = int(score)
     return scores
+scoreN = {'abandon':	-2,
+          'abandoned':  -2}
 
 def countMoodScore(scores,fp):
     data_f = codecs.open(fp.name,'rU','utf-8') 
@@ -42,6 +44,8 @@ def main():
     hw()
 
     scores = scoreDirectory()
+
+    print scoreN.items()
     
     countMoodScore(scores,tweet_file)
     
